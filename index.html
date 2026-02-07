@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroPulse EEG Monitor</title>
+    <!-- Purposeful mono + display fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="clinical-body">
+
+    <!-- Top Status Bar -->
+    <div class="monitor-header">
+        <div class="patient-info">
+            <span class="badged">ID: 492-04-X</span>
+            <span class="header-title">NEUROPULSE EEG MONITOR</span>
+            <span class="text-dim">LAB DEMO</span>
+        </div>
+        <div class="device-status">
+            <span>256 Hz</span>
+            <span>NOTCH: 50Hz</span>
+            <span class="status-live">LIVE REC</span>
+            <span id="time-display">00:00:00</span>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="monitor-grid">
+
+        <!-- Left: Waveforms (75%) -->
+        <div class="waveform-panel">
+            <div class="plot-block">
+                <div class="plot-header">
+                    <span class="plot-title">LIVE SIGNAL (RAW + NOISE)</span>
+                    <span class="plot-meta" id="latency-live">Latency: -- ms</span>
+                </div>
+                <div id="plot-live" class="plot-container"></div>
+            </div>
+            <div class="plot-block">
+                <div class="plot-header">
+                    <span class="plot-title">FILTERED SIGNAL (DL / SMOOTHED)</span>
+                    <span class="plot-meta" id="latency-filtered">Latency: -- ms</span>
+                </div>
+                <div id="plot-filtered" class="plot-container"></div>
+            </div>
+        </div>
+
+        <!-- Right: Vitals (25%) -->
+        <div class="vitals-panel">
+            <div class="vital-group">
+                <label>SIGNAL QUAL</label>
+                <div class="value-large text-green" id="val-snr">--</div>
+                <div class="unit">dB</div>
+            </div>
+
+            <div class="vital-group">
+                <label>NOISE RATIO</label>
+                <div class="value-large text-white" id="val-nsr">--</div>
+                <div class="unit">N/S</div>
+            </div>
+
+            <div class="vital-group">
+                <label>DOM BAND</label>
+                <div class="value-large text-yellow" id="val-band">--</div>
+            </div>
+
+            <div class="vital-group">
+                <label>STATE</label>
+                <div class="value-text text-white" id="val-state">INIT</div>
+            </div>
+
+            <!-- Spectrum Mini-Table -->
+            <div class="spectrum-table">
+                <div class="row header">
+                    <span>BAND</span> <span>PWR</span>
+                </div>
+                <div class="row"><span>DELTA</span> <span id="pwr-delta">0.0</span></div>
+                <div class="row"><span>THETA</span> <span id="pwr-theta">0.0</span></div>
+                <div class="row"><span>ALPHA</span> <span id="pwr-alpha">0.0</span></div>
+                <div class="row"><span>BETA</span> <span id="pwr-beta">0.0</span></div>
+                <div class="row"><span>GAMMA</span> <span id="pwr-gamma">0.0</span></div>
+            </div>
+
+            <div class="control-footer">
+                <button id="btn-mark" class="clinical-btn">EVENT MARK</button>
+                <button id="btn-interfere" class="clinical-btn warn">TEST SIGNAL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Inputs for logic compatibility -->
+    <div style="display:none">
+        <select id="select-noise">
+            <option value="mixed">MIXED</option>
+        </select>
+        <input id="range-noise" value="0.65">
+        <button id="btn-power"></button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

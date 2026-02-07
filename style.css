@@ -1,0 +1,263 @@
+:root {
+    --bg-0: #06080b;
+    --bg-1: #0b0f14;
+    --bg-2: #111824;
+    --grid-color: #18202b;
+    --text-main: #e6edf3;
+    --text-dim: #7a8796;
+    --color-green: #2ef2a3;
+    --color-yellow: #f0c84b;
+    --color-red: #ff4d4d;
+    --color-blue: #5ac8ff;
+    --color-accent: #a3ff8f;
+
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-head: 'Space Grotesk', sans-serif;
+}
+
+body.clinical-body {
+    background:
+        radial-gradient(1200px 600px at 15% 10%, #111827 0%, transparent 60%),
+        radial-gradient(800px 500px at 85% 20%, #0e1c2a 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.monitor-header {
+    background: rgba(8, 12, 18, 0.8);
+    border-bottom: 1px solid #1b2430;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    height: 46px;
+    align-items: center;
+    backdrop-filter: blur(6px);
+}
+
+.patient-info,
+.device-status {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.header-title {
+    font-family: var(--font-head);
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.badged {
+    background: #1a2230;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 700;
+    border: 1px solid #263245;
+}
+
+.status-live {
+    color: var(--color-red);
+    animation: blink 1s infinite;
+    font-weight: 600;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0.3;
+    }
+}
+
+.text-dim {
+    color: var(--text-dim);
+}
+
+.text-green {
+    color: var(--color-green);
+}
+
+.text-yellow {
+    color: var(--color-yellow);
+}
+
+.text-white {
+    color: #fff;
+}
+
+/* Main Grid */
+.monitor-grid {
+    flex: 1;
+    display: flex;
+    height: calc(100vh - 46px);
+}
+
+.waveform-panel {
+    flex: 1;
+    border-right: 1px solid #1b2430;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px;
+    background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 26px 26px;
+}
+
+.plot-block {
+    flex: 1;
+    background: rgba(5, 9, 14, 0.75);
+    border: 1px solid #1b2636;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.plot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #1b2636;
+    background: linear-gradient(90deg, rgba(16, 22, 30, 0.9), rgba(8, 12, 18, 0.6));
+}
+
+.plot-title {
+    font-family: var(--font-head);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+}
+
+.plot-meta {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+.plot-container {
+    width: 100%;
+    flex: 1;
+}
+
+.vitals-panel {
+    width: 280px;
+    background: rgba(6, 9, 14, 0.9);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border-left: 1px solid #1b2430;
+}
+
+.vital-group {
+    border-left: 3px solid #223048;
+    padding-left: 12px;
+}
+
+.vital-group label {
+    display: block;
+    color: var(--color-blue);
+    font-size: 0.72rem;
+    margin-bottom: 6px;
+    letter-spacing: 0.08em;
+}
+
+.value-large {
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 500;
+}
+
+.value-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.unit {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+/* Table */
+.spectrum-table {
+    border: 1px solid #1b2636;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.spectrum-table .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom: 1px solid #0f1622;
+}
+
+.spectrum-table .row.header {
+    background: #101826;
+    color: var(--color-blue);
+}
+
+/* Buttons */
+.control-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.clinical-btn {
+    background: #111a26;
+    border: 1px solid #22324a;
+    color: #fff;
+    padding: 10px;
+    font-family: inherit;
+    cursor: pointer;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+}
+
+.clinical-btn:hover {
+    background: #192235;
+}
+
+.clinical-btn:active {
+    background: #1e2940;
+}
+
+.clinical-btn.warn {
+    border-color: #5d2b1b;
+    color: #ffb3a6;
+}
+
+@media (max-width: 980px) {
+    body.clinical-body {
+        overflow: auto;
+    }
+
+    .monitor-grid {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .waveform-panel {
+        border-right: none;
+    }
+
+    .vitals-panel {
+        width: auto;
+        border-left: none;
+        border-top: 1px solid #1b2430;
+    }
+}
