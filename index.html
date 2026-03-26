@@ -11,7 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body class="clinical-body">
@@ -61,6 +61,30 @@
             </div>
 
             <div class="vital-group">
+                <label>PSNR</label>
+                <div class="value-large text-green" id="val-psnr">--</div>
+                <div class="unit">dB</div>
+            </div>
+
+            <div class="vital-group">
+                <label>SSIM</label>
+                <div class="value-large text-green" id="val-ssim">--</div>
+                <div class="unit">[0-1]</div>
+            </div>
+
+            <div class="vital-group">
+                <label>MSE</label>
+                <div class="value-large text-green" id="val-mse">--</div>
+                <div class="unit">-</div>
+            </div>
+
+            <div class="vital-group">
+                <label>Efficiency</label>
+                <div class="value-large text-green" id="val-eff">--</div>
+                <div class="unit">[0-1]</div>
+            </div>
+
+            <div class="vital-group">
                 <label>NOISE RATIO</label>
                 <div class="value-large text-white" id="val-nsr">--</div>
                 <div class="unit">N/S</div>
@@ -104,7 +128,7 @@
         <button id="btn-power"></button>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/static/script.js"></script>
 </body>
 
 </html>

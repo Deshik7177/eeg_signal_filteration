@@ -1,3 +1,46 @@
+def calculate_mse(clean_signal, test_signal):
+    """
+    Mean Squared Error (MSE) between clean and test signal.
+    """
+    return np.mean((clean_signal - test_signal) ** 2)
+
+def calculate_psnr(clean_signal, test_signal):
+    """
+    Peak Signal-to-Noise Ratio (PSNR) in dB.
+    """
+    mse = calculate_mse(clean_signal, test_signal)
+    if mse == 0:
+        return float('inf')
+    max_pixel = np.max(np.abs(clean_signal))
+    psnr = 20 * np.log10(max_pixel / np.sqrt(mse))
+    return psnr
+
+def calculate_ssim(clean_signal, test_signal):
+    """
+    Structural Similarity Index (SSIM) for 1D signals.
+    """
+    # Simple 1D SSIM implementation
+    K1, K2 = 0.01, 0.03
+    L = np.max([np.max(clean_signal), np.max(test_signal)]) - np.min([np.min(clean_signal), np.min(test_signal)])
+    C1 = (K1 * L) ** 2
+    C2 = (K2 * L) ** 2
+    mu_x = np.mean(clean_signal)
+    mu_y = np.mean(test_signal)
+    sigma_x = np.var(clean_signal)
+    sigma_y = np.var(test_signal)
+    sigma_xy = np.mean((clean_signal - mu_x) * (test_signal - mu_y))
+    ssim = ((2 * mu_x * mu_y + C1) * (2 * sigma_xy + C2)) / ((mu_x ** 2 + mu_y ** 2 + C1) * (sigma_x + sigma_y + C2))
+    return ssim
+
+def calculate_efficiency(clean_signal, test_signal):
+    """
+    Efficiency: 1 - (MSE / variance of clean signal)
+    """
+    mse = calculate_mse(clean_signal, test_signal)
+    var = np.var(clean_signal)
+    if var == 0:
+        return 0.0
+    return 1 - (mse / var)
 import numpy as np
 from scipy import signal as scipy_signal
 

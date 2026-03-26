@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import numpy as np
 import os
@@ -8,6 +8,12 @@ from signal_utils import generate_eeg_signal, add_noise, calculate_snr, bandpass
 from model import load_model, denoise_signal
 
 app = Flask(__name__)
+CWD = os.path.dirname(os.path.abspath(__file__))
+
+# Serve index.html at root
+@app.route('/')
+def serve_index():
+    return send_from_directory(CWD, 'index.html')
 CORS(app)
 
 # Global variables
@@ -65,16 +71,25 @@ def add_noise_to_signal():
         # Add noise
         noisy_signal = add_noise(clean_signal, noise_type, noise_level)
         
-        # Calculate SNR
+
+        # Calculate metrics
+        from signal_utils import calculate_psnr, calculate_ssim, calculate_mse, calculate_efficiency
         snr = calculate_snr(clean_signal, noisy_signal)
-        
+        psnr = calculate_psnr(clean_signal, noisy_signal)
+        ssim = calculate_ssim(clean_signal, noisy_signal)
+        mse = calculate_mse(clean_signal, noisy_signal)
+        efficiency = calculate_efficiency(clean_signal, noisy_signal)
+
         response = {
             'noisy_signal': noisy_signal.tolist(),
             'snr': float(snr),
+            'psnr': float(psnr),
+            'ssim': float(ssim),
+            'mse': float(mse),
+            'efficiency': float(efficiency),
             'noise_type': noise_type,
             'noise_level': noise_level
         }
-        
         return jsonify(response), 200
     
     except Exception as e:
@@ -94,30 +109,47 @@ def filter_signal():
         else:
             filtered_signal = bandpass_filter(noisy_signal, lowcut=0.5, highcut=40, sampling_rate=256, order=4)
         
+
+        from signal_utils import calculate_psnr, calculate_ssim, calculate_mse, calculate_efficiency
         response = {
             'filtered_signal': filtered_signal.tolist(),
         }
-        
-        # Calculate SNR if clean signal is provided
+
+        # Calculate metrics if clean signal is provided
         if len(clean_signal) > 0:
-            # Handle mismatched lengths (e.g., sliding window vs latest chunk)
             clean_len = len(clean_signal)
             if clean_len <= len(noisy_signal):
-                # Align to the most recent samples
                 noisy_slice = noisy_signal[-clean_len:]
                 filtered_slice = filtered_signal[-clean_len:]
-                
+
                 snr_before = calculate_snr(clean_signal, noisy_slice)
                 snr_after = calculate_snr(clean_signal, filtered_slice)
                 snr_improvement = snr_after - snr_before
-                
-                response['snr_before'] = float(snr_before)
-                response['snr_after'] = float(snr_after)
-                response['snr_improvement'] = float(snr_improvement)
-            else:
-                # If clean signal is longer (unlikely), skip metrics for this cycle
-                pass
-        
+
+                psnr_before = calculate_psnr(clean_signal, noisy_slice)
+                psnr_after = calculate_psnr(clean_signal, filtered_slice)
+                ssim_before = calculate_ssim(clean_signal, noisy_slice)
+                ssim_after = calculate_ssim(clean_signal, filtered_slice)
+                mse_before = calculate_mse(clean_signal, noisy_slice)
+                mse_after = calculate_mse(clean_signal, filtered_slice)
+                eff_before = calculate_efficiency(clean_signal, noisy_slice)
+                eff_after = calculate_efficiency(clean_signal, filtered_slice)
+
+                response.update({
+                    'snr_before': float(snr_before),
+                    'snr_after': float(snr_after),
+                    'snr_improvement': float(snr_improvement),
+                    'psnr_before': float(psnr_before),
+                    'psnr_after': float(psnr_after),
+                    'ssim_before': float(ssim_before),
+                    'ssim_after': float(ssim_after),
+                    'mse_before': float(mse_before),
+                    'mse_after': float(mse_after),
+                    'efficiency_before': float(eff_before),
+                    'efficiency_after': float(eff_after)
+                })
+            # else: skip metrics
+
         return jsonify(response), 200
     
     except Exception as e:
